@@ -51,7 +51,7 @@ function RulesModal() {
         ]}
       >
         <ImageBackground
-          source={require("./media/patternpad.png")}
+          source={require("../../assets/images/patternpad.png")}
           style={styles.image}
         />
         <View style={styles.titleContainer}>

@@ -314,7 +314,7 @@ export default function TabluApp() {
     return (
       <View style={styles.container}>
         <ImageBackground
-          source={require("./media/patternpad.png")}
+          source={require("../../assets/images/patternpad.png")}
           style={styles.image}
         />
         <View
@@ -393,7 +393,7 @@ export default function TabluApp() {
                 height: "100%",
                 position: "absolute",
               }}
-              source={require("./media/twitter.png")}
+              source={require("../../assets/images/twitter.png")}
             ></Image>
           </TouchableOpacity>
           <TouchableOpacity
@@ -406,7 +406,7 @@ export default function TabluApp() {
                 height: "100%",
                 position: "absolute",
               }}
-              source={require("./media/facebook.png")}
+              source={require("../../assets/images/facebook.png")}
             ></Image>
           </TouchableOpacity>
           <TouchableOpacity
@@ -531,7 +531,7 @@ export default function TabluApp() {
     return (
       <View style={styles.container}>
         <ImageBackground
-          source={require("./media/patternpad.png")}
+          source={require("../../assets/images/patternpad.png")}
           style={styles.image}
         />
         <View
@@ -927,7 +927,7 @@ export default function TabluApp() {
       return (
         <View style={styles.container}>
           <ImageBackground
-            source={require("./media/patternpad.png")}
+            source={require("../../assets/images/patternpad.png")}
             style={styles.image}
           />
           <View
