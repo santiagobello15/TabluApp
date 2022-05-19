@@ -5,10 +5,11 @@ import {
   TouchableOpacity,
   ImageBackground,
   Image,
+  Animated,
 } from "react-native";
 import * as WebBrowser from "expo-web-browser";
 import { styles } from "./styles";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState, useRef } from "react";
 import ConfigModal from "../config/config";
 import RulesModal from "../rules/rules";
 import QuitInGame from "../quitInGame/quitInGame";
@@ -64,16 +65,47 @@ export default function TabluApp() {
     deviceWidth,
   } = useContext(Context);
 
+  const [plusPoint, setPlusPoint] = useState(true);
+  const [minusPoint, setMinusPoint] = useState(true);
+  const [passPoint, setPassPoint] = useState(true);
+  const [blockPass, setBlockPass] = useState(false);
+  const [blockAdd, setBlockAdd] = useState(false);
+  const [blockSubstract, setBlockSubstract] = useState(false);
+
   const FetchDatafromDB = async () => {
     if (cardsDB == undefined) {
       await fetch("https://tablugames.com/api/cardsFamosos")
         .then((response) => response.json())
         .then((data) => {
           setcardsDB(data.CardsArray);
+        })
+        .catch((error) => {
+          // retrying to fetch
+          console.log(error);
+          FetchDatafromDB();
         });
     }
   };
   FetchDatafromDB();
+
+  const blurryField = useRef(new Animated.Value(0)).current;
+
+  useEffect(() => {
+    if (plusPoint == true || minusPoint == true || passPoint == true) {
+      setTimeout(() => {
+        Animated.timing(blurryField, {
+          toValue: 0,
+          useNativeDriver: true,
+          duration: 500,
+        }).start(() => {
+          blurryField.setValue(1);
+          setPlusPoint(false);
+          setMinusPoint(false);
+          setPassPoint(false);
+        });
+      }, 700);
+    }
+  }, [plusPoint, minusPoint, passPoint]);
 
   useEffect(() => {
     // changed from function to useeffect. is not possible to setstate insite setstate function ?
@@ -274,6 +306,7 @@ export default function TabluApp() {
   };
 
   const AddPoints = () => {
+    setPlusPoint(true);
     setIndexOnShuffled(indexOnShuffled + 1);
     setCurrentCard(indexOnShuffled);
     if (assignedTeamOne == true) {
@@ -284,6 +317,7 @@ export default function TabluApp() {
   };
 
   const DeductPoints = () => {
+    setMinusPoint(true);
     setIndexOnShuffled(indexOnShuffled + 1);
     setCurrentCard(indexOnShuffled);
     if (assignedTeamOne == true) {
@@ -294,6 +328,7 @@ export default function TabluApp() {
   };
 
   const Pasar = () => {
+    setPassPoint(true);
     setIndexOnShuffled(indexOnShuffled + 1);
     setCurrentCard(indexOnShuffled);
   };
@@ -534,6 +569,60 @@ export default function TabluApp() {
     );
   };
 
+  const BlurAndText = () => {
+    if (plusPoint == true) {
+      return (
+        <Animated.View
+          style={[styles.gameCardBlur, { transform: [{ scale: blurryField }] }]}
+        >
+          <Text
+            style={{
+              fontFamily: "MuktaMalarBold",
+              fontSize: 25,
+              color: "white",
+            }}
+          >
+            +1
+          </Text>
+        </Animated.View>
+      );
+    }
+    if (minusPoint == true) {
+      return (
+        <Animated.View
+          style={[styles.gameCardBlur, { transform: [{ scale: blurryField }] }]}
+        >
+          <Text
+            style={{
+              fontFamily: "MuktaMalarBold",
+              fontSize: 25,
+              color: "white",
+            }}
+          >
+            -1
+          </Text>
+        </Animated.View>
+      );
+    }
+    if (passPoint == true) {
+      return (
+        <Animated.View
+          style={[styles.gameCardBlur, { transform: [{ scale: blurryField }] }]}
+        >
+          <Text
+            style={{
+              fontFamily: "MuktaMalarBold",
+              fontSize: 25,
+              color: "white",
+            }}
+          >
+            Pasar
+          </Text>
+        </Animated.View>
+      );
+    }
+  };
+
   const inGameView = () => {
     return (
       <View style={styles.container}>
@@ -627,6 +716,7 @@ export default function TabluApp() {
               </TouchableOpacity>
 
               <View style={styles.cardView}>
+                {BlurAndText()}
                 <Text
                   adjustsFontSizeToFit
                   style={[
@@ -712,8 +802,15 @@ export default function TabluApp() {
             </View>
             <View style={styles.gamingPadRight}>
               <TouchableOpacity
+                disabled={blockAdd == true ? true : false}
                 onPress={() => {
                   AddPoints();
+                  setBlockSubstract(true);
+                  setBlockAdd(true);
+                  setBlockPass(true);
+                  setTimeout(() => setBlockPass(false), 1500);
+                  setTimeout(() => setBlockAdd(false), 1500);
+                  setTimeout(() => setBlockSubstract(false), 1500);
                 }}
                 style={[
                   styles.pointBtn,
@@ -738,9 +835,16 @@ export default function TabluApp() {
                 </Text>
               </TouchableOpacity>
               <TouchableOpacity
+                disabled={blockSubstract == true ? true : false}
                 onPress={() => {
                   {
                     DeductPoints();
+                    setBlockSubstract(true);
+                    setBlockAdd(true);
+                    setBlockPass(true);
+                    setTimeout(() => setBlockPass(false), 1500);
+                    setTimeout(() => setBlockAdd(false), 1500);
+                    setTimeout(() => setBlockSubstract(false), 1500);
                   }
                 }}
                 style={[
@@ -763,8 +867,15 @@ export default function TabluApp() {
                 </Text>
               </TouchableOpacity>
               <TouchableOpacity
+                disabled={blockPass == true ? true : false}
                 onPress={() => {
                   Pasar();
+                  setBlockSubstract(true);
+                  setBlockAdd(true);
+                  setBlockPass(true);
+                  setTimeout(() => setBlockPass(false), 1500);
+                  setTimeout(() => setBlockAdd(false), 1500);
+                  setTimeout(() => setBlockSubstract(false), 1500);
                 }}
                 style={[
                   styles.pointBtn,

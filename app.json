@@ -2,7 +2,7 @@
   "expo": {
     "name": "Tablú Famosos",
     "slug": "TabluFamosos",
-    "version": "1.0.3",
+    "version": "1.0.4",
     "orientation": "portrait",
     "icon": "./assets/iconn.png",
     "splash": {
@@ -19,7 +19,7 @@
     },
     "android": {
       "package": "tablugames.famosos",
-      "versionCode": 2,
+      "versionCode": 3,
       "adaptiveIcon": {
         "foregroundImage": "./assets/iconn.png",
         "backgroundColor": "#FFFFFF"
