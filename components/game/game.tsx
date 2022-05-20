@@ -71,7 +71,7 @@ export default function TabluApp() {
   const [blockPass, setBlockPass] = useState(false);
   const [blockAdd, setBlockAdd] = useState(false);
   const [blockSubstract, setBlockSubstract] = useState(false);
-  const [timeUp, setTimeUp] = useState(false);
+  const [timeUp, setTimeUp] = useState(true);
 
   const FetchDatafromDB = async () => {
     if (cardsDB == undefined) {
