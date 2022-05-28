@@ -5,7 +5,7 @@ import {
   TouchableOpacity,
   ImageBackground,
   Image,
-  Animated,
+  Animated, BackHandler
 } from "react-native";
 import * as WebBrowser from "expo-web-browser";
 import { styles } from "./styles";
@@ -662,6 +662,25 @@ export default function TabluApp() {
       );
     }
   };
+
+  useEffect(()=>{
+    const backBtnInGame: any = () =>{
+      if(gameState == "inGame" && quitInGameModalActive == true){
+        setTimeout(() => setQuitInGameModalActive(false), 300);
+        setQuitInGameActive(false);
+        setStartCounter(true);
+      return true}
+      if(gameState == "inGame" && quitInGameModalActive == false){
+        setQuitInGameActive(true);
+        setQuitInGameModalActive(true);
+        stopTimer();
+        return true}
+    }
+    const backHandler = BackHandler.addEventListener(
+      "hardwareBackPress", backBtnInGame
+    )
+  })
+
 
   const inGameView = () => {
     return (
