@@ -15,6 +15,7 @@ import RulesModal from "../rules/rules";
 import QuitInGame from "../quitInGame/quitInGame";
 import StartModal from "../start/start";
 import { Context } from "../../context/AppContext";
+import { Audio } from 'expo-av';
 
 export default function TabluApp() {
   const {
@@ -72,6 +73,28 @@ export default function TabluApp() {
   const [blockAdd, setBlockAdd] = useState(false);
   const [blockSubstract, setBlockSubstract] = useState(false);
   const [timeUp, setTimeUp] = useState(true);
+  const [sound, setSound] = useState<any>();
+
+  
+  const soundSwitch = () =>{
+    if (sound == undefined){
+      playSound()
+    }
+    else {console.log('Unloading Sound');
+    sound.unloadAsync(); setSound(undefined)}
+  }
+
+  async function playSound() {
+    console.log('Loading Sound');
+    const { sound } = await Audio.Sound.createAsync(
+       require('../../assets/sounds/countryboy.mp3')
+    );
+    setSound(sound);
+
+    console.log('Playing Sound');
+    await sound.playAsync();
+}
+
 
   const FetchDatafromDB = async () => {
     if (cardsDB == undefined) {
@@ -392,6 +415,38 @@ export default function TabluApp() {
     );
   };
 
+  const soundIcon = () =>{
+    if(sound == undefined){return(<TouchableOpacity
+      onPress={soundSwitch}
+      style={styles.soundBtn}
+    >
+      <Image
+        style={{
+          width: "100%",
+          height: "100%",
+          position: "absolute",
+        }}
+        source={require("../../assets/images/soundOff.png")}
+      ></Image>
+    </TouchableOpacity>)}
+    else {
+      return(<TouchableOpacity
+        onPress={soundSwitch}
+        style={styles.soundBtn}
+      >
+        <Image
+          style={{
+            width: "100%",
+            height: "100%",
+            position: "absolute",
+          }}
+          source={require("../../assets/images/soundOn.png")}
+        ></Image>
+      </TouchableOpacity>)
+      
+    }
+  }
+
   const afterGameView = () => {
     return (
       <View style={styles.container}>
@@ -404,7 +459,7 @@ export default function TabluApp() {
             styles.mainContainer,
             deviceWidth > limitWidth ? styles.mainContainerBig : null,
           ]}
-        >
+        >{soundIcon()}
           <View style={[styles.titleContainer, { top: "8%" }]}>
             <Text
               adjustsFontSizeToFit
@@ -697,6 +752,7 @@ export default function TabluApp() {
         >
           {BlurTimeUp()}
           {StopOrCount()}
+          {soundIcon()}
           <View style={[styles.titleContainer, { top: "8%" }]}>
             <Text
               adjustsFontSizeToFit
@@ -1125,7 +1181,7 @@ export default function TabluApp() {
               styles.mainContainer,
               deviceWidth > limitWidth ? styles.mainContainerBig : null,
             ]}
-          >
+          >{soundIcon()}
             <View style={styles.titleContainer}>
               <Text
                 adjustsFontSizeToFit
