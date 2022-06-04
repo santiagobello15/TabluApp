@@ -94,7 +94,7 @@ export default function TabluApp() {
 
     console.log('Playing Sound');
     await sound.playAsync();
-    await sound.setVolumeAsync(0.)
+    await sound.setVolumeAsync(0.2)
     
 }
 
@@ -249,7 +249,7 @@ export default function TabluApp() {
       setStartCounter(false);
       setTime(timeGame);
       setTimeUp(true);
-      roundOver()
+      if(currentRound != roundsGame){roundOver()}
       setCurrentRound(currentRound + 1);
       if (assignedTeamOne == true) {
         setAssignedTeamOne(false);
