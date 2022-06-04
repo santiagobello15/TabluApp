@@ -74,7 +74,7 @@ export default function TabluApp() {
   const [blockSubstract, setBlockSubstract] = useState(false);
   const [timeUp, setTimeUp] = useState(true);
   const [song, setSong] = useState<any>();
-  const [soundAnswer, setSoundAnswer] = useState<any>();
+
 
   
   const soundSwitch = () =>{
@@ -94,6 +94,8 @@ export default function TabluApp() {
 
     console.log('Playing Sound');
     await sound.playAsync();
+    await sound.setVolumeAsync(0.)
+    
 }
 
   async function correctSound() {
@@ -101,28 +103,34 @@ export default function TabluApp() {
     const { sound } = await Audio.Sound.createAsync(
       require('../../assets/sounds/correct.mp3')
    );
-   setSoundAnswer(sound)
    await sound.playAsync();
-   setTimeout(()=>{sound.unloadAsync(); setSoundAnswer(undefined)}, 1200)
+   setTimeout(()=>{sound.unloadAsync(); }, 1200)
   }}
   async function incorrectSound() {
     if(song != undefined){
     const { sound } = await Audio.Sound.createAsync(
       require('../../assets/sounds/incorrect.mp3')
    );
-   setSoundAnswer(sound)
-   await sound.playAsync();
-   setTimeout(()=>{sound.unloadAsync(); setSoundAnswer(undefined)}, 1200)
+  await sound.playAsync();
+   setTimeout(()=>{sound.unloadAsync()} , 1200)
   }}
   async function passSound() {
     if(song != undefined){
     const { sound } = await Audio.Sound.createAsync(
       require('../../assets/sounds/pass.mp3')
    );
-   setSoundAnswer(sound)
    await sound.playAsync();
-   setTimeout(()=>{sound.unloadAsync(); setSoundAnswer(undefined)}, 1200)
+   setTimeout(()=>{sound.unloadAsync()}, 1200)
   }}
+  async function roundOver() {
+    if(song != undefined){
+    const { sound } = await Audio.Sound.createAsync(
+      require('../../assets/sounds/roundover.mp3')
+   );
+   await sound.playAsync();
+   setTimeout(()=>{sound.unloadAsync()}, 2500)
+  }}
+
 
   const FetchDatafromDB = async () => {
     if (cardsDB == undefined) {
@@ -241,6 +249,7 @@ export default function TabluApp() {
       setStartCounter(false);
       setTime(timeGame);
       setTimeUp(true);
+      roundOver()
       setCurrentRound(currentRound + 1);
       if (assignedTeamOne == true) {
         setAssignedTeamOne(false);
