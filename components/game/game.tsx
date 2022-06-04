@@ -73,15 +73,16 @@ export default function TabluApp() {
   const [blockAdd, setBlockAdd] = useState(false);
   const [blockSubstract, setBlockSubstract] = useState(false);
   const [timeUp, setTimeUp] = useState(true);
-  const [sound, setSound] = useState<any>();
+  const [song, setSong] = useState<any>();
+  const [soundAnswer, setSoundAnswer] = useState<any>();
 
   
   const soundSwitch = () =>{
-    if (sound == undefined){
+    if (song == undefined){
       playSound()
     }
     else {console.log('Unloading Sound');
-    sound.unloadAsync(); setSound(undefined)}
+    song.unloadAsync(); setSong(undefined)}
   }
 
   async function playSound() {
@@ -89,12 +90,39 @@ export default function TabluApp() {
     const { sound } = await Audio.Sound.createAsync(
        require('../../assets/sounds/countryboy.mp3')
     );
-    setSound(sound);
+    setSong(sound);
 
     console.log('Playing Sound');
     await sound.playAsync();
 }
 
+  async function correctSound() {
+    if(song != undefined){
+    const { sound } = await Audio.Sound.createAsync(
+      require('../../assets/sounds/correct.mp3')
+   );
+   setSoundAnswer(sound)
+   await sound.playAsync();
+   setTimeout(()=>{sound.unloadAsync(); setSoundAnswer(undefined)}, 1200)
+  }}
+  async function incorrectSound() {
+    if(song != undefined){
+    const { sound } = await Audio.Sound.createAsync(
+      require('../../assets/sounds/incorrect.mp3')
+   );
+   setSoundAnswer(sound)
+   await sound.playAsync();
+   setTimeout(()=>{sound.unloadAsync(); setSoundAnswer(undefined)}, 1200)
+  }}
+  async function passSound() {
+    if(song != undefined){
+    const { sound } = await Audio.Sound.createAsync(
+      require('../../assets/sounds/pass.mp3')
+   );
+   setSoundAnswer(sound)
+   await sound.playAsync();
+   setTimeout(()=>{sound.unloadAsync(); setSoundAnswer(undefined)}, 1200)
+  }}
 
   const FetchDatafromDB = async () => {
     if (cardsDB == undefined) {
@@ -416,7 +444,7 @@ export default function TabluApp() {
   };
 
   const soundIcon = () =>{
-    if(sound == undefined){return(<TouchableOpacity
+    if(song == undefined){return(<TouchableOpacity
       onPress={soundSwitch}
       style={styles.soundBtn}
     >
@@ -927,6 +955,7 @@ export default function TabluApp() {
                   setTimeout(() => setBlockPass(false), 1500);
                   setTimeout(() => setBlockAdd(false), 1500);
                   setTimeout(() => setBlockSubstract(false), 1500);
+                  correctSound()
                 }}
                 style={[
                   styles.pointBtn,
@@ -961,6 +990,7 @@ export default function TabluApp() {
                     setTimeout(() => setBlockPass(false), 1500);
                     setTimeout(() => setBlockAdd(false), 1500);
                     setTimeout(() => setBlockSubstract(false), 1500);
+                    incorrectSound()
                   }
                 }}
                 style={[
@@ -992,6 +1022,7 @@ export default function TabluApp() {
                   setTimeout(() => setBlockPass(false), 1500);
                   setTimeout(() => setBlockAdd(false), 1500);
                   setTimeout(() => setBlockSubstract(false), 1500);
+                  passSound()
                 }}
                 style={[
                   styles.pointBtn,

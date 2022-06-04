@@ -248,7 +248,7 @@ export const styles = StyleSheet.create({
     position: "absolute",
     justifyContent: "center",
     alignItems: "center",
-    zIndex: 1,
+    zIndex: 9999,
   },
   whoIs: {
     width: "12%",
