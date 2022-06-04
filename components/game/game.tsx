@@ -130,6 +130,14 @@ export default function TabluApp() {
    await sound.playAsync();
    setTimeout(()=>{sound.unloadAsync()}, 2500)
   }}
+  async function gameOver() {
+    if(song != undefined){
+    const { sound } = await Audio.Sound.createAsync(
+      require('../../assets/sounds/gameover.mp3')
+   );
+   await sound.playAsync();
+   setTimeout(()=>{sound.unloadAsync()}, 4500)
+  }}
 
 
   const FetchDatafromDB = async () => {
@@ -263,6 +271,7 @@ export default function TabluApp() {
     // changed from function to useeffect. is not possible to setstate insite setstate function ?
     if (time == 0.0 && currentRound == roundsGame) {
       setGameState("afterGame");
+      gameOver()
     }
   }, [time, currentRound, roundsGame]);
 
