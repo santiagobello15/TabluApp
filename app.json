@@ -19,7 +19,7 @@
     },
     "android": {
       "package": "tablugames.famosos",
-      "versionCode": 4,
+      "versionCode": 5,
       "adaptiveIcon": {
         "foregroundImage": "./assets/iconn.png",
         "backgroundColor": "#FFFFFF"
