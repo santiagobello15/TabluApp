@@ -85,15 +85,20 @@ export default function TabluApp() {
     else {setMusicOn(true)}
   }
 
-  useEffect(() => {
+
+
+  useEffect( ()  => {
     if (musicOn == true){
       playSound()
+/*       song.replayAsync() */
     }
     if(musicOn == false && song != undefined){
       console.log('Unloading Sound');
       song.unloadAsync()
       setSong(undefined)
-    }}, [musicOn]);
+    }
+  
+  }, [musicOn]);
 
   async function playSound() {
     console.log('Loading Sound');
@@ -104,8 +109,9 @@ export default function TabluApp() {
     console.log('Playing Sound');
     await sound.playAsync();
     await sound.setVolumeAsync(0.2)
+    await sound.setIsLoopingAsync(true)
+ 
 }
-
   async function correctSound() {
     if(song != undefined){
     const { sound } = await Audio.Sound.createAsync(
