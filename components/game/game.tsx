@@ -76,17 +76,6 @@ export default function TabluApp() {
   const [musicOn, setMusicOn] = useState(false);
   const [song, setSong] = useState<any>();
 
-
-  
-  const soundSwitch = () =>{
-    if (musicOn == true){
-      setMusicOn(false)
-    }
-    else {setMusicOn(true)}
-  }
-
-
-
   useEffect( ()  => {
     if (musicOn == true){
       playSound()
@@ -110,8 +99,8 @@ export default function TabluApp() {
     await sound.playAsync();
     await sound.setVolumeAsync(0.2)
     await sound.setIsLoopingAsync(true)
- 
 }
+
   async function correctSound() {
     if(song != undefined){
     const { sound } = await Audio.Sound.createAsync(
@@ -477,7 +466,7 @@ export default function TabluApp() {
 
   const soundIcon = () =>{
     if(musicOn == false){return(<TouchableOpacity
-      onPress={soundSwitch}
+      onPress={()=>{setMusicOn(!musicOn)}}
       style={styles.soundBtn}
     >
       <Image
@@ -491,7 +480,7 @@ export default function TabluApp() {
     </TouchableOpacity>)}
     else {
       return(<TouchableOpacity
-        onPress={soundSwitch}
+        onPress={()=>{setMusicOn(!musicOn)}}
         style={styles.soundBtn}
       >
         <Image
